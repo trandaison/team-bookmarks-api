@@ -25,7 +25,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # gem 'rack-cors'
 gem 'carrierwave', '~> 2.0'
 gem 'pagy', '~> 5.10'
-gem 'pg', '~> 0.21'
+gem 'pg'
 gem 'ransack'
 gem 'rspec-rails'
 gem 'rswag-api'
