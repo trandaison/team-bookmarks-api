@@ -219,7 +219,11 @@ paths:
         '204':
           description: Blog deleted
 servers:
-- url: "{defaultHost}"
+- url: "{heroku}"
   variables:
-    defaultHost:
+    heroku:
+      default: https://api-placeholder.herokuapp.com
+- url: "{localhost}"
+  variables:
+    localhost:
       default: http://localhost:3000

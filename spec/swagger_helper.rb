@@ -24,9 +24,17 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: '{defaultHost}',
+          url: '{heroku}',
           variables: {
-            defaultHost: {
+            heroku: {
+              default: ENV.fetch('HOST') { 'https://api-placeholder.herokuapp.com' }
+            }
+          }
+        },
+        {
+          url: '{localhost}',
+          variables: {
+            localhost: {
               default: ENV.fetch('HOST') { 'http://localhost:3000' }
             }
           }

@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   include Pagy::Backend
 
+  def root
+    render json: 'PONG'
+  end
+
   private
   def pagy_meta(pagy)
     data = pagy_metadata(@pagy)
