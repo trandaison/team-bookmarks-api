@@ -3,7 +3,7 @@ class Api::V1::BlogsController < ApplicationController
 
   # GET /api/v1/blogs
   def index
-    @q = Blog.ransack(search_query)
+    @q = Blog.order(created_at: :desc).ransack(search_query)
     @pagy, @blogs = pagy(@q.result, items: params[:items])
 
     render json: { data: @blogs, pagy: pagy_meta(@pagy) }

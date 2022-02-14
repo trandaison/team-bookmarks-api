@@ -1,0 +1,225 @@
+---
+openapi: 3.0.3
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/blogs":
+    post:
+      summary: Creates a blog
+      tags:
+      - Blogs
+      parameters: []
+      responses:
+        '201':
+          description: Blog created
+        '422':
+          description: Unprocessable entity
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                blog[title]:
+                  type: string
+                  required: true
+                  example: My Blog
+                  description: Title of the blog
+                blog[content]:
+                  type: string
+                  required: true
+                  example: My Blog Content
+                  description: Content of the blog
+                blog[image]:
+                  type: string
+                  format: binary
+                  required: true
+                  description: Image of the blog
+    get:
+      summary: Retrieves blogs as a list
+      tags:
+      - Blogs
+      parameters:
+      - name: search
+        in: query
+        description: Search title or content containing the query
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        default: created_at
+        schema:
+          type: string
+      - name: sort_direction
+        in: query
+        enum:
+        - asc
+        - desc
+        default: desc
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Blog found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                          description: Title of the blog
+                        content:
+                          type: string
+                          description: Content of the blog
+                        image:
+                          type: object
+                          description: Image of the blog
+                          properties:
+                            url:
+                              type: string
+                              description: Image url
+                        created_at:
+                          type: string
+                          description: Created at of the blog
+                        updated_at:
+                          type: string
+                          description: Updated at of the blog
+                  pagy:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                      page:
+                        type: integer
+                      items:
+                        type: integer
+                      pages:
+                        type: integer
+                      last:
+                        type: integer
+                      in:
+                        type: integer
+                      from:
+                        type: integer
+                      to:
+                        type: integer
+                      prev:
+                        type: integer
+                      next:
+                        type: integer
+                required:
+                - data
+                - pagy
+  "/api/v1/blogs/{id}":
+    get:
+      summary: Retrieves a blog
+      tags:
+      - Blogs
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Blog found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                    example: My Blog
+                    description: Title of the blog
+                  content:
+                    type: string
+                    example: My Blog Content
+                    description: Content of the blog
+                  image:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: http://localhost:3000/images/fallback/default.png
+                        description: Image of the blog
+                  created_at:
+                    type: string
+                    example: '2019-01-01T00:00:00.000Z'
+                    description: Created at of the blog
+                  updated_at:
+                    type: string
+                    example: '2019-01-01T00:00:00.000Z'
+                    description: Updated at of the blog
+        '404':
+          description: Blog not found
+        '406':
+          description: Unsupported accept header
+    put:
+      summary: Update a blog
+      tags:
+      - Blogs
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Blog updated
+        '404':
+          description: Blog not found
+        '422':
+          description: Unprocessable request
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                blog[title]:
+                  type: string
+                  required: true
+                  example: My Blog
+                  description: Title of the blog
+                blog[content]:
+                  type: string
+                  required: true
+                  example: My Blog Content
+                  description: Content of the blog
+                blog[image]:
+                  type: string
+                  format: binary
+                  required: true
+                  description: Image of the blog
+    delete:
+      summary: Delete a blog
+      tags:
+      - Blogs
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Blog deleted
+servers:
+- url: "{defaultHost}"
+  variables:
+    defaultHost:
+      default: http://localhost:3000
