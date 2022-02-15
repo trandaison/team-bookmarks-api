@@ -105,6 +105,8 @@ describe 'Blogs API' do
     get 'Retrieves blogs as a list' do
       tags 'Blogs'
       produces 'application/json'
+      parameter name: :page, in: :query, type: :number, default: 1, description: 'Page number'
+      parameter name: :items, in: :query, type: :number, default: 20, description: 'Number of items per page'
       parameter name: :search, in: :query, type: :string, description: 'Search title or content containing the query'
       parameter name: :sort_by, in: :query, type: :string, default: 'created_at'
       parameter name: :sort_direction, in: :query, type: :string, enum: %w[asc desc], default: 'desc'
@@ -138,7 +140,8 @@ describe 'Blogs API' do
                   },
                   created_at: {
                     type: :string,
-                    description: 'Created at of the blog' },
+                    description: 'Created at of the blog'
+                  },
                   updated_at: {
                     type: :string,
                     description: 'Updated at of the blog'
