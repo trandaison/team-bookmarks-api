@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.3
 info:
-  title: API V1
+  title: API Placeholder
   version: v1
 paths:
   "/api/v1/blogs":
@@ -23,24 +23,34 @@ paths:
               properties:
                 blog[title]:
                   type: string
-                  required: true
                   example: My Blog
                   description: Title of the blog
                 blog[content]:
                   type: string
-                  required: true
                   example: My Blog Content
                   description: Content of the blog
                 blog[image]:
                   type: string
                   format: binary
-                  required: true
                   description: Image of the blog
+              required:
+              - blog[title]
+              - blog[content]
     get:
       summary: Retrieves blogs as a list
       tags:
       - Blogs
       parameters:
+      - name: page
+        in: query
+        description: Page number. Default is `1`
+        schema:
+          type: number
+      - name: items
+        in: query
+        description: Number of items per page. Default is `20`
+        schema:
+          type: number
       - name: search
         in: query
         description: Search title or content containing the query
@@ -48,15 +58,13 @@ paths:
           type: string
       - name: sort_by
         in: query
-        default: created_at
+        description: Valid value is one of `[id, title, content, created_at, updated_at]`.
+          Default is `created_at`
         schema:
           type: string
       - name: sort_direction
         in: query
-        enum:
-        - asc
-        - desc
-        default: desc
+        description: Valid value is `asc` or `desc`. Default is `desc`
         schema:
           type: string
       responses:
@@ -121,7 +129,7 @@ paths:
                 - pagy
   "/api/v1/blogs/{id}":
     get:
-      summary: Retrieves a blog
+      summary: Retrieves a blog by id
       tags:
       - Blogs
       parameters:
@@ -192,19 +200,19 @@ paths:
               properties:
                 blog[title]:
                   type: string
-                  required: true
                   example: My Blog
                   description: Title of the blog
                 blog[content]:
                   type: string
-                  required: true
                   example: My Blog Content
                   description: Content of the blog
                 blog[image]:
                   type: string
                   format: binary
-                  required: true
                   description: Image of the blog
+              required:
+              - blog[title]
+              - blog[content]
     delete:
       summary: Delete a blog
       tags:

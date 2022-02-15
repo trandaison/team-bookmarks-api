@@ -12,23 +12,21 @@ describe 'Blogs API' do
         properties: {
           'blog[title]': {
             type: :string,
-            required: true,
             example: 'My Blog',
             description: 'Title of the blog'
           },
           'blog[content]': {
             type: :string,
-            required: true,
             example: 'My Blog Content',
             description: 'Content of the blog'
           },
           'blog[image]': {
             type: :string,
             format: :binary,
-            required: true,
             description: 'Image of the blog'
           }
-        }
+        },
+        required: %w[blog[title] blog[content]]
       }
 
       response '201', 'Blog created' do
@@ -44,7 +42,7 @@ describe 'Blogs API' do
   end
 
   path '/api/v1/blogs/{id}' do
-    get 'Retrieves a blog' do
+    get 'Retrieves a blog by id' do
       tags 'Blogs'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
@@ -105,11 +103,11 @@ describe 'Blogs API' do
     get 'Retrieves blogs as a list' do
       tags 'Blogs'
       produces 'application/json'
-      parameter name: :page, in: :query, type: :number, default: 1, description: 'Page number'
-      parameter name: :items, in: :query, type: :number, default: 20, description: 'Number of items per page'
+      parameter name: :page, in: :query, type: :number, description: 'Page number. Default is `1`'
+      parameter name: :items, in: :query, type: :number, description: 'Number of items per page. Default is `20`'
       parameter name: :search, in: :query, type: :string, description: 'Search title or content containing the query'
-      parameter name: :sort_by, in: :query, type: :string, default: 'created_at'
-      parameter name: :sort_direction, in: :query, type: :string, enum: %w[asc desc], default: 'desc'
+      parameter name: :sort_by, in: :query, type: :string, description: 'Valid value is one of `[id, title, content, created_at, updated_at]`. Default is `created_at`'
+      parameter name: :sort_direction, in: :query, type: :string, description: 'Valid value is `asc` or `desc`. Default is `desc`'
 
       response '200', 'Blog found' do
         schema type: :object,
@@ -183,23 +181,21 @@ describe 'Blogs API' do
         properties: {
           'blog[title]': {
             type: :string,
-            required: true,
             example: 'My Blog',
             description: 'Title of the blog'
           },
           'blog[content]': {
             type: :string,
-            required: true,
             example: 'My Blog Content',
             description: 'Content of the blog'
           },
           'blog[image]': {
             type: :string,
             format: :binary,
-            required: true,
             description: 'Image of the blog'
           }
-        }
+        },
+        required: %w[blog[title] blog[content]]
       }
 
       response '200', 'Blog updated' do
