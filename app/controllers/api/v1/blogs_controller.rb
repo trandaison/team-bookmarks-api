@@ -19,7 +19,7 @@ class Api::V1::BlogsController < ApplicationController
     @blog = Blog.new(blog_params)
 
     if @blog.save
-      render json: @blog, status: :created
+      render json: @blog.reload, status: :created
     else
       render json: @blog.errors, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class Api::V1::BlogsController < ApplicationController
   # PATCH/PUT /api/v1/blogs/1
   def update
     if @blog.update(blog_params)
-      render json: @blog
+      render json: @blog.reload
     else
       render json: @blog.errors, status: :unprocessable_entity
     end
