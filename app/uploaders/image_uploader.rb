@@ -44,11 +44,6 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   def asset_host
-    host = ENV.fetch('HOST') { 'http://localhost' }
-    port = ENV.fetch('PORT') { 3000 }
-
-    return host if [443, 80].include?(port)
-
-    "#{host}:#{port}"
+    ENV.fetch('HOST') { 'http://localhost:3000' }
   end
 end
