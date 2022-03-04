@@ -24,9 +24,12 @@ gem 'dotenv-rails'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
+gem 'bcrypt', '~> 3.1.7'
 gem 'carrierwave', '~> 2.0'
+gem 'config'
 gem 'cloudinary'
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
+gem 'jwt'
 gem 'pagy', '~> 5.10'
 gem 'pg'
 gem 'ransack'

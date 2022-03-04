@@ -226,6 +226,86 @@ paths:
       responses:
         '204':
           description: Blog deleted
+  "/api/v1/login":
+    post:
+      summary: Login
+      tags:
+      - Auhorization
+      parameters: []
+      responses:
+        '200':
+          description: Logged in successfully with the refresh token
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@simple.me
+                  description: Email of the user
+                password:
+                  type: string
+                  example: password
+                  description: Password of the user
+                remember_me:
+                  type: boolean
+                  example: true
+                  description: Remember me to get the refresh token
+  "/api/v1/logout":
+    delete:
+      summary: Logout
+      tags:
+      - Auhorization
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Logged out successfully
+        '401':
+          description: Unauthorized
+  "/api/v1/me":
+    get:
+      summary: Get my profile
+      tags:
+      - Auhorization
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  "/api/v1/refresh_tokens":
+    post:
+      summary: Refresh Access Token
+      tags:
+      - Auhorization
+      parameters: []
+      responses:
+        '200':
+          description: Token has been reset successfully
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: some-token
+                  description: The refresh token
 servers:
 - url: "{heroku}"
   variables:
