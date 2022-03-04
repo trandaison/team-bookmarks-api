@@ -6,7 +6,7 @@ describe 'Api::V1::MesController' do
   path '/api/v1/me' do
     get 'Get my profile' do
       tags 'Auhorization'
-      parameter name: 'Authorization', in: :header, type: :string
+      security [{ BearerAuth: [] }]
 
       response '200', 'Success' do
         schema type: :object,
@@ -32,12 +32,12 @@ describe 'Api::V1::MesController' do
           required: %w[user]
 
         let!(:user) { User.create(email: 'email@gmail.com', password: 'password', name: 'name' ) }
-        let(:Authorization) { 'Bearer ' + user.issue_jwt_token }
+        let(:BearerAuth) { 'Bearer ' + user.issue_jwt_token }
         run_test!
       end
 
       response '401', 'Unauthorized' do
-        let(:Authorization) { 'Bearer OK' }
+        let(:BearerAuth) { 'Bearer ' + user.issue_jwt_token }
         schema type: :object,
           properties: {
             error: { type: :string },

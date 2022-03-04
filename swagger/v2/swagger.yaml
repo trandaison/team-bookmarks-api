@@ -1,10 +1,10 @@
 ---
 openapi: 3.0.3
 info:
-  title: API Placeholder
-  version: v1
+  title: API Placeholder V2
+  version: v2
 paths:
-  "/api/v1/blogs":
+  "/api/v2/blogs":
     post:
       summary: Creates a blog
       tags:
@@ -44,27 +44,32 @@ paths:
       - name: page
         in: query
         description: Page number. Default is `1`
+        required: false
         schema:
           type: number
       - name: items
         in: query
         description: Number of items per page. Default is `20`
+        required: false
         schema:
           type: number
       - name: search
         in: query
         description: Search title or content containing the query
+        required: false
         schema:
           type: string
       - name: sort_by
         in: query
         description: Valid value is one of `[id, title, content, created_at, updated_at]`.
           Default is `created_at`
+        required: false
         schema:
           type: string
       - name: sort_direction
         in: query
         description: Valid value is `asc` or `desc`. Default is `desc`
+        required: false
         schema:
           type: string
       responses:
@@ -76,58 +81,68 @@ paths:
                 type: object
                 properties:
                   data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        title:
-                          type: string
-                          description: Title of the blog
-                        content:
-                          type: string
-                          description: Content of the blog
-                        image:
-                          type: object
-                          description: Image of the blog
-                          properties:
-                            url:
-                              type: string
-                              description: Image url
-                        created_at:
-                          type: string
-                          description: Created at of the blog
-                        updated_at:
-                          type: string
-                          description: Updated at of the blog
-                  pagy:
                     type: object
                     properties:
-                      count:
-                        type: integer
-                      page:
-                        type: integer
                       items:
-                        type: integer
-                      pages:
-                        type: integer
-                      last:
-                        type: integer
-                      in:
-                        type: integer
-                      from:
-                        type: integer
-                      to:
-                        type: integer
-                      prev:
-                        type: integer
-                      next:
-                        type: integer
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            email:
+                              type: string
+                            name:
+                              type: string
+                            avatar:
+                              type: object
+                              properties:
+                                url:
+                                  type: string
+                              required:
+                              - url
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
+                          required:
+                          - email
+                          - name
+                          - avatar
+                          - created_at
+                          - updated_at
+                      pagination:
+                        type: object
+                        properties:
+                          count:
+                            type: number
+                            description: Total number of items
+                          page:
+                            type: number
+                            description: Current page
+                          offset:
+                            type: number
+                            description: Items per page
+                          total:
+                            type: number
+                            description: Total number of pages
+                          prev:
+                            type: number
+                            description: Previous page
+                          next:
+                            type: number
+                            description: Next page
+                        required:
+                        - count
+                        - page
+                        - offset
+                        - total
+                        - prev
+                        - next
+                    required:
+                    - items
+                    - pagination
                 required:
                 - data
-                - pagy
-  "/api/v1/blogs/{id}":
+  "/api/v2/blogs/{id}":
     get:
       summary: Retrieves a blog by id
       tags:
@@ -226,7 +241,7 @@ paths:
       responses:
         '204':
           description: Blog deleted
-  "/api/v1/login":
+  "/api/v2/login":
     post:
       summary: Login
       tags:
@@ -255,7 +270,10 @@ paths:
                   type: boolean
                   example: true
                   description: Remember me to get the refresh token
-  "/api/v1/logout":
+              required:
+              - email
+              - password
+  "/api/v2/logout":
     delete:
       summary: Logout
       tags:
@@ -267,7 +285,7 @@ paths:
           description: Logged out successfully
         '401':
           description: Unauthorized
-  "/api/v1/me":
+  "/api/v2/me":
     get:
       summary: Get my profile
       tags:
@@ -279,7 +297,7 @@ paths:
           description: Success
         '401':
           description: Unauthorized
-  "/api/v1/refresh_tokens":
+  "/api/v2/refresh_tokens":
     post:
       summary: Refresh Access Token
       tags:
@@ -298,9 +316,9 @@ paths:
               properties:
                 token:
                   type: string
-                  example: some-token
+                  example: sometoken628396
                   description: The refresh token
-  "/api/v1/users":
+  "/api/v2/users":
     post:
       summary: Register
       tags:
@@ -341,3 +359,133 @@ servers:
   variables:
     localhost:
       default: http://localhost:3000
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Blog:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          example: My Blog
+          description: Title of the blog
+        content:
+          type: string
+          example: My Blog Content
+          description: Content of the blog
+        image:
+          type: object
+          properties:
+            url:
+              type: string
+              example: http://localhost:3000/images/fallback/default.png
+              description: Image of the blog
+          required:
+          - url
+        created_at:
+          type: string
+          example: '2019-01-01T00:00:00.000Z'
+          description: Created at of the blog
+        updated_at:
+          type: string
+          example: '2019-01-01T00:00:00.000Z'
+          description: Updated at of the blog
+      required:
+      - id
+      - title
+      - content
+      - image
+      - created_at
+      - updated_at
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: object
+          properties:
+            url:
+              type: string
+          required:
+          - url
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      required:
+      - email
+      - name
+      - avatar
+      - created_at
+      - updated_at
+    Pagination:
+      type: object
+      properties:
+        count:
+          type: number
+          description: Total number of items
+        page:
+          type: number
+          description: Current page
+        offset:
+          type: number
+          description: Items per page
+        total:
+          type: number
+          description: Total number of pages
+        prev:
+          type: number
+          description: Previous page
+        next:
+          type: number
+          description: Next page
+      required:
+      - count
+      - page
+      - offset
+      - total
+      - prev
+      - next
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        path:
+          type: string
+        error_code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              code:
+                type: string
+              message:
+                type: string
+            required:
+            - field
+            - code
+            - message
+      required:
+      - message
+      - type
+      - status
+      - path
+      - error_code
+      - errors

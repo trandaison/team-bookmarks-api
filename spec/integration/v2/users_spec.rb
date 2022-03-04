@@ -2,8 +2,8 @@
 
 require 'swagger_helper'
 
-describe 'Api::V1::UsersController' do
-  path '/api/v1/users' do
+describe 'Api::V2::UsersController', swagger_doc: 'v2/swagger.yaml' do
+  path '/api/v2/users' do
     post 'Register' do
       tags 'Auhorization'
       consumes 'multipart/form-data'
@@ -36,56 +36,30 @@ describe 'Api::V1::UsersController' do
       response '201', 'Register successfully' do
         schema type: :object,
           properties: {
-            user: {
+            data: {
               type: :object,
-              properties: {
-                email: { type: :string },
-                name: { type: :string },
-                avatar: {
-                  type: :object,
-                  properties: {
-                    url: { type: :string },
-                  },
-                  required: %w[url]
-                },
-                created_at: { type: :string },
-                updated_at: { type: :string },
-              },
-              required: %w[email name avatar created_at updated_at]
-            }
+              schema: {
+                '$ref': '#/components/schemas/User'
+              }
+            },
           },
-          required: %w[user]
+          required: %w[data]
 
         # let('user[name]') { 'name' }
         # let('user[email]') { 'myemail@gmail.com' }
         # let('user[password]') { 'password' }
-        # run_test!
+        let(:user) { { user: {} } }
+        run_test!
       end
 
       response '422', 'Register failed' do
-        schema type: :object,
-          properties: {
-            name: {
-              type: :array,
-              items: { type: :string }
-            },
-            email: {
-              type: :array,
-              items: { type: :string }
-            },
-            password: {
-              type: :array,
-              items: { type: :string }
-            },
-            avatar: {
-              type: :array,
-              items: { type: :string }
-            },
-          }
+        schema '$ref': '#/components/schemas/Error'
+
         # let('user[name]') { '' }
         # let('user[email]') { '' }
         # let('user[password]') { '' }
-        # run_test!
+        let(:user) { { user: {} } }
+        run_test!
       end
     end
   end
