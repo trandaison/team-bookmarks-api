@@ -14,12 +14,15 @@ Rails.application.routes.draw do
     end
 
     namespace :v2 do
-      resources :blogs
+      resources :blogs do
+        resources :comments, only: %i[index create]
+      end
+      resources :comments, only: %i[show update destroy]
       resources :login, only: :create
       resource :logout, only: :destroy
       resources :refresh_tokens, only: :create
       resources :users, only: :create
-      resource :me, only: :show
+      resource :me, only: %i[show update]
     end
   end
 

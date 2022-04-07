@@ -47,7 +47,7 @@ paths:
         required: false
         schema:
           type: number
-      - name: items
+      - name: offset
         in: query
         description: Number of items per page. Default is `20`
         required: false
@@ -241,6 +241,139 @@ paths:
       responses:
         '204':
           description: Blog deleted
+  "/api/v2/blogs/{blog_id}/comments":
+    post:
+      summary: Creates a comment
+      tags:
+      - Comments
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: blog_id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '201':
+          description: Comment created
+        '401':
+          description: Unauthorized
+        '404':
+          description: Blog not found
+        '422':
+          description: Unprocessable entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment[content]:
+                  type: string
+                  example: This is an awesome blog
+                  description: Maximun length is 5000 characters
+              required:
+              - comment[content]
+    get:
+      summary: Retrieves comments as a list
+      tags:
+      - Comments
+      parameters:
+      - name: blog_id
+        in: path
+        required: true
+        schema:
+          type: number
+      - name: cursor_id
+        in: query
+        required: false
+        description: The ID of the last comment
+        schema:
+          type: number
+      - name: sort_direction
+        in: query
+        required: false
+        description: Valid value is `asc` or `desc`. Default is `desc`
+        schema:
+          type: string
+      - name: offset
+        in: query
+        required: false
+        description: Number of items per page. Default is `20`
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Comments found
+  "/api/v2/comments/{id}":
+    get:
+      summary: Retrieves a comment by id
+      tags:
+      - Comments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Comment found
+    put:
+      summary: Update a comment
+      tags:
+      - Comments
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Blog updated
+        '401':
+          description: Unauthorized
+        '404':
+          description: Blog not found
+        '422':
+          description: Unprocessable entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment[content]:
+                  type: string
+                  example: This is new content for the comment
+                  description: Maximun length is 5000 characters
+              required:
+              - comment[content]
+    delete:
+      summary: Delete a comment
+      tags:
+      - Comments
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Blog deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Comment not found
   "/api/v2/login":
     post:
       summary: Login
@@ -297,6 +430,37 @@ paths:
           description: Success
         '401':
           description: Unauthorized
+    put:
+      summary: Update my profile
+      tags:
+      - Auhorization
+      security:
+      - BearerAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        '422':
+          description: Unprocessable request
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                me[name]:
+                  type: string
+                  description: Within 50 characters
+                me[email]:
+                  type: string
+                me[password]:
+                  type: string
+                  description: At least 8 characters
+                me[avatar]:
+                  type: string
+                  format: binary
   "/api/v2/refresh_tokens":
     post:
       summary: Refresh Access Token
@@ -362,8 +526,10 @@ servers:
 components:
   securitySchemes:
     BearerAuth:
-      type: http
-      scheme: bearer
+      description: JWT key necessary to use API calls
+      type: apiKey
+      name: authorization
+      in: header
   schemas:
     Blog:
       type: object
@@ -402,6 +568,62 @@ components:
       - image
       - created_at
       - updated_at
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+          example: This is an awesome blog
+          description: Maximun length is 5000 characters
+        blog_id:
+          type: integer
+        created_at:
+          type: string
+          example: '2019-01-01T00:00:00.000Z'
+          description: Created at of the comment
+        updated_at:
+          type: string
+          example: '2019-01-01T00:00:00.000Z'
+          description: Updated at of the comment
+        deleted_at:
+          type: string
+          nullable: true
+          example: '2019-01-01T00:00:00.000Z'
+          description: Deleted at of the comment
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+              example: John Doe
+              description: Name of the user
+            email:
+              type: string
+              example: ''
+              description: Email of the user
+            avatar:
+              type: object
+              properties:
+                url:
+                  type: string
+              required:
+              - url
+          required:
+          - id
+          - name
+          - email
+          - avatar
+      required:
+      - id
+      - content
+      - blog_id
+      - created_at
+      - updated_at
+      - deleted_at
     User:
       type: object
       properties:

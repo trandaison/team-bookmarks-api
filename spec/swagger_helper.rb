@@ -69,14 +69,10 @@ RSpec.configure do |config|
       components: {
         securitySchemes: {
           BearerAuth: {
-            type: :http,
-            scheme: :bearer
-          }
-        },
-        securitySchemes: {
-          BearerAuth: {
-            type: :http,
-            scheme: :bearer
+            description: 'JWT key necessary to use API calls',
+            type: :apiKey,
+            name: 'authorization',
+            in: :header
           }
         },
         schemas: {
@@ -117,6 +113,61 @@ RSpec.configure do |config|
               }
             },
             required: %w[id title content image created_at updated_at]
+          },
+          Comment: {
+            type: :object,
+            properties: {
+              id: { type: :integer },
+              content: {
+                type: :string,
+                example: 'This is an awesome blog',
+                description: 'Maximun length is 5000 characters'
+              },
+              blog_id: { type: :integer },
+              created_at: {
+                type: :string,
+                example: '2019-01-01T00:00:00.000Z',
+                description: 'Created at of the comment'
+              },
+              updated_at: {
+                type: :string,
+                example: '2019-01-01T00:00:00.000Z',
+                description: 'Updated at of the comment'
+              },
+              deleted_at: {
+                type: :string,
+                nullable: true,
+                example: '2019-01-01T00:00:00.000Z',
+                description: 'Deleted at of the comment'
+              },
+              user: {
+                type: :object,
+                properties: {
+                  id: { type: :integer },
+                  name: {
+                    type: :string,
+                    example: 'John Doe',
+                    description: 'Name of the user'
+                  },
+                  email: {
+                    type: :string,
+                    example: '',
+                    description: 'Email of the user'
+                  },
+                  avatar: {
+                    type: :object,
+                    properties: {
+                      url: {
+                        type: :string,
+                      }
+                    },
+                    required: %w[url]
+                  }
+                },
+                required: %w[id name email avatar]
+              }
+            },
+            required: %w[id content blog_id created_at updated_at deleted_at],
           },
           User: {
             type: :object,

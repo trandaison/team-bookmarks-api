@@ -7,7 +7,13 @@ class Api::V2::BaseController < ActionController::API
     render json: as_json_error(message: exception.message), status: :not_found
   end
 
+  rescue_from ForbiddenError do |exception|
+    render json: as_json_error(message: exception.message), status: :forbidden
+  end
+
   rescue_from ActionController::ParameterMissing do |exception|
+    puts params
+    puts exception
     render json: as_json_error(message: exception.message), status: :bad_request
   end
 
@@ -45,12 +51,12 @@ class Api::V2::BaseController < ActionController::API
     render json: as_json_error(message: 'Please log in'), status: :unauthorized unless logged_in?
   end
 
-  def as_json_list records, pagy
+  def as_json_list records, pagy = nil
     {
       data: {
         items: records,
       },
-      pagination: pagy_meta(pagy)
+      pagination: pagy ? pagy_meta(pagy) : {}
     }
   end
 
@@ -58,7 +64,7 @@ class Api::V2::BaseController < ActionController::API
     { data: data }
   end
 
-  def as_json_error errors_details: [], message: 'Validation failed'
+  def as_json_error errors_details = [], message: 'Validation failed'
     {
       type: :validation,
       status: :bad_request,

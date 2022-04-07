@@ -7,7 +7,7 @@ class Api::V2::UsersController < Api::V2::BaseController
     if @user.save
       render json: as_json(@user.as_json(except: %i[password_digest id admin])), status: :created
     else
-      render json: as_json_error(errors_details: @user.errors_details), status: :unprocessable_entity
+      render json: as_json_error(@user.errors_details), status: :unprocessable_entity
     end
   end
 

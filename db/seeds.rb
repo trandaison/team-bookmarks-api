@@ -6,9 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 password = Settings.default_admin_password
-admin = User.find_or_create_by!(admin: true)
+admin = User.find_or_initialize_by(admin: true)
 admin.update!(email: "admin@api-placeholder.herokuapp.com", password: password, name: "Admin")
 
-# 100.times.each do
-#   Blog.create(title: Faker::Movie.title, content: Faker::Lorem.paragraphs.join('\n'))
-# end
+20.times.each do
+  User.create!(email: Faker::Internet.email, password: 'Aa@12345678', name: Faker::Superhero.name)
+end
+
+40.times.each do
+  blog = Blog.create!(title: Faker::Movie.title, content: Faker::Lorem.paragraphs.join("\n"))
+  rand(0..100).times.each do
+    blog.comments.create!(user: User.order("RANDOM()").first, content: Faker::Lorem.paragraphs.join("\n"))
+  end
+end

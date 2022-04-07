@@ -107,7 +107,7 @@ describe 'Api::V2::BlogsController', swagger_doc: 'v2/swagger.yaml' do
       tags 'Blogs'
       produces 'application/json'
       parameter name: :page, in: :query, type: :number, description: 'Page number. Default is `1`', required: false
-      parameter name: :items, in: :query, type: :number, description: 'Number of items per page. Default is `20`', required: false
+      parameter name: :offset, in: :query, type: :number, description: 'Number of items per page. Default is `20`', required: false
       parameter name: :search, in: :query, type: :string, description: 'Search title or content containing the query', required: false
       parameter name: :sort_by, in: :query, type: :string, description: 'Valid value is one of `[id, title, content, created_at, updated_at]`. Default is `created_at`', required: false
       parameter name: :sort_direction, in: :query, type: :string, description: 'Valid value is `asc` or `desc`. Default is `desc`', required: false

@@ -37,6 +37,7 @@ gem 'rspec-rails'
 gem 'rswag-api'
 gem 'rswag-specs'
 gem 'rswag-ui'
+gem 'spring'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
@@ -48,7 +49,6 @@ end
 group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
