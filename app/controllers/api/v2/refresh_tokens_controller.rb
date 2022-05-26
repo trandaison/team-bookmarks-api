@@ -3,7 +3,6 @@ class Api::V2::RefreshTokensController < Api::V2::BaseController
   before_action :validate_token, only: :create
 
   def create
-    puts decoded_token
     user_id = decoded_token[0]['user_id']
     @user = User.find_by(id: user_id)
     if @user

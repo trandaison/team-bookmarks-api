@@ -23,7 +23,13 @@ Rails.application.routes.draw do
       resources :refresh_tokens, only: :create
       resources :users, only: :create
       resource :me, only: %i[show update]
+      resource :reset_password, only: %i[create show update]
     end
+  end
+
+  namespace :v2 do
+    get 'reset_password/edit', to: 'reset_password#edit'
+    put 'reset_password/edit', to: 'reset_password#update'
   end
 
   root to: redirect('/api-docs')

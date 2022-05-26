@@ -1,0 +1,50 @@
+<div class="row mt-5">
+  <div class="col-lg-6 offset-lg-3">
+    <% if @user %>
+      <h1 class="display-4">Hi <%= @user.name %>,</h1>
+
+      <% if flash[:success] %>
+      <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Well done!</h4>
+        <p><%= flash[:success] %></p>
+        <hr>
+        <p class="mb-0">
+          Click here to go to the home page: <%= link_to 'Home', root_path %>
+        </p>
+      </div>
+
+      <% else %>
+        <p>Let's set a new password</p>
+        <%= form_for @user, url: v2_reset_password_edit_path(token: params[:token]), method: :put, remote: true do |f| %>
+          <% if @user.errors.any? %>
+            <ul class="alert alert-danger px-4">
+              <% @user.errors.full_messages.each do |msg| %>
+                <li class="ml-2"><%= msg %></li>
+              <% end %>
+            </ul>
+          <% end %>
+
+          <%= hidden_field_tag :token, params[:token] %>
+
+          <div class="form-group">
+            <%= f.label :password, "New Password*" %>
+            <%= f.password_field :password, autocomplete: "off", required: true, class: "form-control" %>
+            <small id="passwordHelp" class="form-text text-muted">Input at least 8 characters.</small>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :password_confirmation, "Password confirmation*" %>
+            <%= f.password_field :password_confirmation, autocomplete: "off", required: true, class: "form-control" %>
+          </div>
+
+          <div class="form-group text-center">
+            <%= f.submit "Submit", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <h1 class="display-4">Error</h1>
+      <p><%= flash[:danger] %></p>
+    <% end %>
+  </div>
+</div>

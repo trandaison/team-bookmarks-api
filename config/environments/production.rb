@@ -110,4 +110,17 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  Rails.application.routes.default_url_options = { host: ENV['HOST'] }
+  config.action_mailer.default_url_options = { host: ENV['HOST'] }
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    address: ENV["SMTP_HOST"],
+    port: ENV["SMTP_PORT"],
+    authentication: ENV["SMTP_AUTHENTICATION"],
+    user_name: ENV["SMTP_USER_NAME"],
+    password: ENV["SMTP_PASSWORD"],
+    enable_starttls_auto: true
+  }
 end

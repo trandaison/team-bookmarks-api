@@ -482,6 +482,84 @@ paths:
                   type: string
                   example: sometoken628396
                   description: The refresh token
+  "/api/v2/reset_password":
+    post:
+      summary: Forgot password
+      tags:
+      - Reset password
+      parameters: []
+      responses:
+        '201':
+          description: Request reset password successfully
+        '404':
+          description: Email does not exist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                  description: The user email address
+                reset_password_url:
+                  type: string
+                  example: http://your-domain.com/reset_password
+                  description: 'The reset password url from your website, provide
+                    this url to get a correct reset password link in the email. A
+                    query named `token` will be added to the url, which will be used
+                    to identify the user.<br/>For example: If your front-end app is
+                    running under localhost:3000, the reset_password_url value should
+                    be `http://localhost:3000/reset_password`, then the url in the
+                    email will be: `http://localhost:3000/reset_password?token=abc123`'
+              required:
+              - email
+    get:
+      summary: Verify a reset password token
+      tags:
+      - Reset password
+      parameters:
+      - name: token
+        in: query
+        required: true
+        description: The reset password token from the URL in the email
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The token is valid
+        '400':
+          description: The token has expired or invalid
+        '404':
+          description: The token has already been used
+    put:
+      summary: Reset password
+      tags:
+      - Reset password
+      parameters: []
+      responses:
+        '200':
+          description: Password updated successfully
+        '400':
+          description: The token has expired or invalid
+        '404':
+          description: The token has already been used
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: New password
+                token:
+                  type: string
+                  description: The reset password token
+              required:
+              - password
+              - token
   "/api/v2/users":
     post:
       summary: Register

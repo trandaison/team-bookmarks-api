@@ -5,7 +5,7 @@ class Api::V2::UsersController < Api::V2::BaseController
     @user = User.new(user_params)
 
     if @user.save
-      render json: as_json(@user.as_json(except: %i[password_digest id admin])), status: :created
+      render json: as_json(@user.as_json(except: %i[password_digest id admin reset_password_token])), status: :created
     else
       render json: as_json_error(@user.errors_details), status: :unprocessable_entity
     end
