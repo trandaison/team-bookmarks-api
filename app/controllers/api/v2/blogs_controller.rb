@@ -1,5 +1,4 @@
-class Api::V2::BlogsController < Api::V2::BaseController
-  skip_before_action :authorized
+class Api::V2::BlogsController < Api::V2::UnauthorizedController
   before_action :set_blog, only: [:show, :update, :destroy]
 
   def index

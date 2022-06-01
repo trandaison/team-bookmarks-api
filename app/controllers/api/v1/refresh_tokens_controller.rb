@@ -1,4 +1,4 @@
-class Api::V1::RefreshTokensController < UnauthorizedController
+class Api::V1::RefreshTokensController < Api::V1::UnauthorizedController
   before_action :validate_token, only: :create
 
   def create
