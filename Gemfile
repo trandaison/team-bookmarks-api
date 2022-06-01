@@ -38,6 +38,7 @@ gem 'rswag-api'
 gem 'rswag-specs'
 gem 'rswag-ui'
 gem 'spring'
+gem 'active_model_serializers', '~> 0.10.0'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record

@@ -1,4 +1,4 @@
-class Api::V1::LoginController < UnauthorizedController
+class Api::V1::LoginController < Api::V1::UnauthorizedController
   def create
     @user = User.find_by(email: params[:email])
     if @user && @user.authenticate(params[:password])

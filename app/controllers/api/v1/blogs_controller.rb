@@ -1,4 +1,4 @@
-class Api::V1::BlogsController < UnauthorizedController
+class Api::V1::BlogsController < Api::V1::UnauthorizedController
   before_action :set_blog, only: [:show, :update, :destroy]
 
   # GET /api/v1/blogs

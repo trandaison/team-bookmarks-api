@@ -21,9 +21,17 @@ Rails.application.routes.draw do
       resources :login, only: :create
       resource :logout, only: :destroy
       resources :refresh_tokens, only: :create
-      resources :users, only: :create
+      resources :users, only: :create do
+        resources :teams, only: %i[create]
+      end
       resource :me, only: %i[show update]
       resource :reset_password, only: %i[create show update]
+      resources :teams, only: %i[index show update destroy] do
+        resources :bookmarks, only: %i[create]
+        resources :folder, only: %i[create]
+      end
+      resources :bookmarks, only: %i[show update destroy]
+      resources :folders, only: %i[show update destroy]
     end
   end
 

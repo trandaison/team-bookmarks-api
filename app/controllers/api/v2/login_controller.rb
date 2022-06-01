@@ -1,6 +1,4 @@
-class Api::V2::LoginController < Api::V2::BaseController
-  skip_before_action :authorized, only: :create
-
+class Api::V2::LoginController < Api::V2::UnauthorizedController
   def create
     @user = User.find_by(email: params[:email])
     if @user && @user.authenticate(params[:password])

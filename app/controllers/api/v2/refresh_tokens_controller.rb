@@ -1,5 +1,4 @@
-class Api::V2::RefreshTokensController < Api::V2::BaseController
-  skip_before_action :authorized, only: :create
+class Api::V2::RefreshTokensController < Api::V2::UnauthorizedController
   before_action :validate_token, only: :create
 
   def create

@@ -1,4 +1,4 @@
-class Api::V2::ResetPasswordsController < Api::V2::BaseController
+class Api::V2::ResetPasswordsController < Api::V2::UnauthorizedController
   include ActionController::MimeResponds
 
   skip_before_action :authorized
