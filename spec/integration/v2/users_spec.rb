@@ -7,6 +7,7 @@ describe 'Api::V2::UsersController', swagger_doc: 'v2/swagger.yaml' do
     post 'Register' do
       tags 'Auhorization'
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {
@@ -37,11 +38,8 @@ describe 'Api::V2::UsersController', swagger_doc: 'v2/swagger.yaml' do
         schema type: :object,
           properties: {
             data: {
-              type: :object,
-              schema: {
-                '$ref': '#/components/schemas/User'
-              }
-            },
+              '$ref': '#/components/schemas/User'
+            }
           },
           required: %w[data]
 

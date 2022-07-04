@@ -7,6 +7,7 @@ describe 'Blogs API' do
     post 'Creates a blog' do
       tags 'Blogs'
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :blog, in: :body, schema: {
         type: :object,
         properties: {
@@ -44,6 +45,7 @@ describe 'Blogs API' do
   path '/api/v1/blogs/{id}' do
     get 'Retrieves a blog by id' do
       tags 'Blogs'
+      consumes 'application/json'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
 
@@ -91,17 +93,13 @@ describe 'Blogs API' do
         let(:id) { 'invalid' }
         run_test!
       end
-
-      response '406', 'Unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
     end
   end
 
   path '/api/v1/blogs' do
     get 'Retrieves blogs as a list' do
       tags 'Blogs'
+      consumes 'application/json'
       produces 'application/json'
       parameter name: :page, in: :query, type: :number, description: 'Page number. Default is `1`'
       parameter name: :items, in: :query, type: :number, description: 'Number of items per page. Default is `20`'
@@ -175,6 +173,7 @@ describe 'Blogs API' do
     put 'Update a blog' do
       tags 'Blogs'
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :id, in: :path, type: :number
       parameter name: :blog, in: :body, schema: {
         type: :object,

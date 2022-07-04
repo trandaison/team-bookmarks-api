@@ -4,3 +4,6 @@ jwt_token_exp:
   refresh: 10080        # 7 days
   reset_password: 1440  # 24 hours
 default_email_from: <%= ENV.fetch('DEFAULT_EMAIL_FROM') { "mock.api.smtp@gmail.com" } %>
+googleapis:
+  oauth2:
+    userinfo: https://www.googleapis.com/oauth2/v3/userinfo

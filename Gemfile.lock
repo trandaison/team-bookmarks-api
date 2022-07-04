@@ -138,6 +138,9 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
+    httparty (0.20.0)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
     i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     image_processing (1.10.3)
@@ -167,6 +170,7 @@ GEM
     mini_portile2 (2.6.1)
     minitest (5.15.0)
     msgpack (1.4.4)
+    multi_xml (0.6.0)
     netrc (0.11.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
@@ -289,6 +293,7 @@ DEPENDENCIES
   config
   dotenv-rails
   faker!
+  httparty
   jwt
   listen (~> 3.3)
   pagy (~> 5.10)

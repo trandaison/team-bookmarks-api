@@ -7,6 +7,7 @@ describe 'Api::V2::ResetPasswordsController', swagger_doc: 'v2/swagger.yaml' do
     post 'Forgot password' do
       tags 'Reset password'
       consumes 'application/json'
+      produces 'application/json'
       parameter name: :credentials, in: :body, schema: {
         type: :object,
         properties: {
@@ -40,6 +41,7 @@ describe 'Api::V2::ResetPasswordsController', swagger_doc: 'v2/swagger.yaml' do
     get 'Verify a reset password token' do
       tags 'Reset password'
       consumes 'application/json'
+      produces 'application/json'
       parameter name: :token, in: :query, type: :string, required: true, description: 'The reset password token from the URL in the email'
 
       response '200', 'The token is valid' do
@@ -85,6 +87,7 @@ describe 'Api::V2::ResetPasswordsController', swagger_doc: 'v2/swagger.yaml' do
     put 'Reset password' do
       tags 'Reset password'
       consumes 'application/json'
+      produces 'application/json'
       parameter name: :credentials, in: :body, schema: {
         type: :object,
         properties: {

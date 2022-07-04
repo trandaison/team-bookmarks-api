@@ -6,8 +6,9 @@ describe 'Api::V2::CommentsController', swagger_doc: 'v2/swagger.yaml' do
   path '/api/v2/blogs/{blog_id}/comments' do
     post 'Creates a comment' do
       tags 'Comments'
-      security [{ BearerAuth: [] }]
+      security [{ Authorization: [] }]
       consumes 'application/json'
+      produces 'application/json'
 
       parameter name: :blog_id, in: :path, type: :number, required: true
       parameter name: :comment, in: :body, schema: {
@@ -78,6 +79,7 @@ describe 'Api::V2::CommentsController', swagger_doc: 'v2/swagger.yaml' do
     get 'Retrieves comments as a list' do
       tags 'Comments'
       consumes 'application/json'
+      produces 'application/json'
 
       parameter name: :blog_id, in: :path, type: :number, required: true
       parameter name: :cursor_id, in: :query, type: :number, required: false, description: 'The ID of the last comment'
@@ -118,6 +120,7 @@ describe 'Api::V2::CommentsController', swagger_doc: 'v2/swagger.yaml' do
     get 'Retrieves a comment by id' do
       tags 'Comments'
       consumes 'application/json'
+      produces 'application/json'
 
       parameter name: :id, in: :path, type: :integer, required: true
 
@@ -144,8 +147,9 @@ describe 'Api::V2::CommentsController', swagger_doc: 'v2/swagger.yaml' do
   path '/api/v2/comments/{id}' do
     put 'Update a comment' do
       tags 'Comments'
-      security [{ BearerAuth: [] }]
+      security [{ Authorization: [] }]
       consumes 'application/json'
+      produces 'application/json'
 
       parameter name: :id, in: :path, type: :number, required: true
       parameter name: :comment, in: :body, schema: {
@@ -219,7 +223,8 @@ describe 'Api::V2::CommentsController', swagger_doc: 'v2/swagger.yaml' do
     delete 'Delete a comment' do
       tags 'Comments'
       consumes 'application/json'
-      security [{ BearerAuth: [] }]
+      produces 'application/json'
+      security [{ Authorization: [] }]
       parameter name: :id, in: :path, type: :integer
 
       response '204', 'Blog deleted' do

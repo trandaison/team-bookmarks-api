@@ -68,11 +68,11 @@ RSpec.configure do |config|
       ],
       components: {
         securitySchemes: {
-          BearerAuth: {
-            description: 'JWT key necessary to use API calls',
-            type: :apiKey,
-            name: 'authorization',
-            in: :header
+          Authorization: {
+            description: 'JWT token for authorization. Example: `Bearer my-jwt-token`',
+            type: :http,
+            scheme: 'bearer',
+            bearerFormat: JWT
           }
         },
         schemas: {

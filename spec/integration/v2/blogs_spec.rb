@@ -7,6 +7,7 @@ describe 'Api::V2::BlogsController', swagger_doc: 'v2/swagger.yaml' do
     post 'Creates a blog' do
       tags 'Blogs'
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :blog, in: :body, schema: {
         type: :object,
         properties: {
@@ -46,6 +47,7 @@ describe 'Api::V2::BlogsController', swagger_doc: 'v2/swagger.yaml' do
   path '/api/v2/blogs/{id}' do
     get 'Retrieves a blog by id' do
       tags 'Blogs'
+      consumes 'application/json'
       produces 'application/json'
       parameter name: :id, in: :path, type: :integer
 
@@ -90,13 +92,8 @@ describe 'Api::V2::BlogsController', swagger_doc: 'v2/swagger.yaml' do
       end
 
       response '404', 'Blog not found' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
-
-      response '406', 'Unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        let(:id) { Blog.create(title: 'foo', content: 'bar', image: '').id }
+        schema '$ref': '#/components/schemas/Error'
+        let(:id) { 'foo' }
         run_test!
       end
     end
@@ -105,6 +102,7 @@ describe 'Api::V2::BlogsController', swagger_doc: 'v2/swagger.yaml' do
   path '/api/v2/blogs' do
     get 'Retrieves blogs as a list' do
       tags 'Blogs'
+      consumes 'application/json'
       produces 'application/json'
       parameter name: :page, in: :query, type: :number, description: 'Page number. Default is `1`', required: false
       parameter name: :offset, in: :query, type: :number, description: 'Number of items per page. Default is `20`', required: false
@@ -184,6 +182,7 @@ describe 'Api::V2::BlogsController', swagger_doc: 'v2/swagger.yaml' do
     put 'Update a blog' do
       tags 'Blogs'
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :id, in: :path, type: :number
       parameter name: :blog, in: :body, schema: {
         type: :object,

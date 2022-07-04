@@ -173,8 +173,6 @@ paths:
                     description: Updated at of the blog
         '404':
           description: Blog not found
-        '406':
-          description: Unsupported accept header
     put:
       summary: Update a blog
       tags:
@@ -235,8 +233,29 @@ paths:
       responses:
         '200':
           description: Logged in successfully with the refresh token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+                required:
+                - token
+                - refresh_token
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
       requestBody:
         content:
           application/json:
@@ -261,24 +280,73 @@ paths:
       tags:
       - Auhorization
       security:
-      - BearerAuth: []
+      - Authorization: []
       responses:
         '204':
           description: Logged out successfully
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
   "/api/v1/me":
     get:
       summary: Get my profile
       tags:
       - Auhorization
       security:
-      - BearerAuth: []
+      - Authorization: []
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      name:
+                        type: string
+                      avatar:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                        required:
+                        - url
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                    required:
+                    - email
+                    - name
+                    - avatar
+                    - created_at
+                    - updated_at
+                required:
+                - user
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
   "/api/v1/refresh_tokens":
     post:
       summary: Refresh Access Token
@@ -288,8 +356,29 @@ paths:
       responses:
         '200':
           description: Token has been reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+                required:
+                - token
+                - refresh_token
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
       requestBody:
         content:
           application/json:
@@ -309,8 +398,60 @@ paths:
       responses:
         '201':
           description: Register successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      name:
+                        type: string
+                      avatar:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                        required:
+                        - url
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+                    required:
+                    - email
+                    - name
+                    - avatar
+                    - created_at
+                    - updated_at
+                required:
+                - user
         '422':
           description: Register failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: array
+                    items:
+                      type: string
+                  email:
+                    type: array
+                    items:
+                      type: string
+                  password:
+                    type: array
+                    items:
+                      type: string
+                  avatar:
+                    type: array
+                    items:
+                      type: string
       requestBody:
         content:
           multipart/form-data:

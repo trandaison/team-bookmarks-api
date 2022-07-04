@@ -13,8 +13,16 @@ paths:
       responses:
         '201':
           description: Blog created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Blog"
         '422':
           description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           multipart/form-data:
@@ -188,8 +196,10 @@ paths:
                     description: Updated at of the blog
         '404':
           description: Blog not found
-        '406':
-          description: Unsupported accept header
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
     put:
       summary: Update a blog
       tags:
@@ -203,10 +213,22 @@ paths:
       responses:
         '200':
           description: Blog updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Blog"
         '404':
           description: Blog not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '422':
           description: Unprocessable request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           multipart/form-data:
@@ -247,7 +269,7 @@ paths:
       tags:
       - Comments
       security:
-      - BearerAuth: []
+      - Authorization: []
       parameters:
       - name: blog_id
         in: path
@@ -257,12 +279,33 @@ paths:
       responses:
         '201':
           description: Comment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Comment"
+                required:
+                - data
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '404':
           description: Blog not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '422':
           description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -306,6 +349,25 @@ paths:
       responses:
         '200':
           description: Comments found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          "$ref": "#/components/schemas/Comment"
+                    required:
+                    - items
+                  pagination:
+                    type: object
+                required:
+                - data
+                - pagination
   "/api/v2/comments/{id}":
     get:
       summary: Retrieves a comment by id
@@ -320,12 +382,22 @@ paths:
       responses:
         '200':
           description: Comment found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    "$ref": "#/components/schemas/Comment"
+                required:
+                - data
     put:
       summary: Update a comment
       tags:
       - Comments
       security:
-      - BearerAuth: []
+      - Authorization: []
       parameters:
       - name: id
         in: path
@@ -335,12 +407,33 @@ paths:
       responses:
         '200':
           description: Blog updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Comment"
+                required:
+                - data
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '404':
           description: Blog not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '422':
           description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -358,7 +451,7 @@ paths:
       tags:
       - Comments
       security:
-      - BearerAuth: []
+      - Authorization: []
       parameters:
       - name: id
         in: path
@@ -370,10 +463,18 @@ paths:
           description: Blog deleted
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '403':
           description: Forbidden
         '404':
           description: Comment not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/v2/login":
     post:
       summary: Login
@@ -383,8 +484,26 @@ paths:
       responses:
         '200':
           description: Logged in successfully with the refresh token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                      refresh_token:
+                        type: string
+                    required:
+                    - token
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -406,44 +525,125 @@ paths:
               required:
               - email
               - password
+  "/api/v2/login/google":
+    post:
+      summary: Sign in with google
+      tags:
+      - Auhorization
+      parameters: []
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                      refresh_token:
+                        type: string
+                    required:
+                    - token
+                    - refresh_token
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token_type:
+                  type: string
+                  example: Bearer
+                  description: The token type
+                access_token:
+                  type: string
+                  example: a0ARrdaM-Crs7nqXUlY28zazZymcY9Bj2b6HD
+                  description: The access token
+              required:
+              - token_type
+              - access_token
   "/api/v2/logout":
     delete:
       summary: Logout
       tags:
       - Auhorization
       security:
-      - BearerAuth: []
+      - Authorization: []
       responses:
         '204':
           description: Logged out successfully
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/v2/me":
     get:
       summary: Get my profile
       tags:
       - Auhorization
       security:
-      - BearerAuth: []
+      - Authorization: []
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/User"
+                required:
+                - data
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
     put:
       summary: Update my profile
       tags:
       - Auhorization
       security:
-      - BearerAuth: []
+      - Authorization: []
       parameters: []
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/User"
+                required:
+                - data
         '422':
           description: Unprocessable request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           multipart/form-data:
@@ -470,8 +670,29 @@ paths:
       responses:
         '200':
           description: Token has been reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                      refresh_token:
+                        type: string
+                    required:
+                    - token
+                    - refresh_token
+                required:
+                - data
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -493,6 +714,10 @@ paths:
           description: Request reset password successfully
         '404':
           description: Email does not exist
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -529,10 +754,40 @@ paths:
       responses:
         '200':
           description: The token is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                          name:
+                            type: string
+                        required:
+                        - email
+                        - name
+                    required:
+                    - user
+                required:
+                - data
         '400':
           description: The token has expired or invalid
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '404':
           description: The token has already been used
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
     put:
       summary: Reset password
       tags:
@@ -543,8 +798,16 @@ paths:
           description: Password updated successfully
         '400':
           description: The token has expired or invalid
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
         '404':
           description: The token has already been used
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           application/json:
@@ -569,8 +832,21 @@ paths:
       responses:
         '201':
           description: Register successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/User"
+                required:
+                - data
         '422':
           description: Register failed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
       requestBody:
         content:
           multipart/form-data:
@@ -603,11 +879,11 @@ servers:
       default: http://localhost:3000
 components:
   securitySchemes:
-    BearerAuth:
-      description: JWT key necessary to use API calls
-      type: apiKey
-      name: authorization
-      in: header
+    Authorization:
+      description: 'JWT token for authorization. Example: `Bearer my-jwt-token`'
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Blog:
       type: object

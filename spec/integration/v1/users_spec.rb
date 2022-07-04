@@ -7,6 +7,7 @@ describe 'Api::V1::UsersController' do
     post 'Register' do
       tags 'Auhorization'
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
         properties: {

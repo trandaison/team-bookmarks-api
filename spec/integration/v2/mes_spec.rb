@@ -6,8 +6,9 @@ describe 'Api::V2::MesController', swagger_doc: 'v2/swagger.yaml' do
   path '/api/v2/me' do
     get 'Get my profile' do
       tags 'Auhorization'
-      security [{ BearerAuth: [] }]
+      security [{ Authorization: [] }]
       consumes 'application/json'
+      produces 'application/json'
 
       response '200', 'Success' do
         schema type: :object,
@@ -35,8 +36,9 @@ describe 'Api::V2::MesController', swagger_doc: 'v2/swagger.yaml' do
   path '/api/v2/me' do
     put 'Update my profile' do
       tags 'Auhorization'
-      security [{ BearerAuth: [] }]
+      security [{ Authorization: [] }]
       consumes 'multipart/form-data'
+      produces 'application/json'
       parameter name: :me, in: :body, schema: {
         type: :object,
         properties: {

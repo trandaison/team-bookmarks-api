@@ -38,6 +38,7 @@ gem 'rswag-api'
 gem 'rswag-specs'
 gem 'rswag-ui'
 gem 'spring'
+gem 'httparty'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record

@@ -7,6 +7,7 @@ describe 'Api::V2::RefreshTokensController', swagger_doc: 'v2/swagger.yaml' do
     post 'Refresh Access Token' do
       tags 'Auhorization'
       consumes 'application/json'
+      produces 'application/json'
       parameter name: :credentials, in: :body, schema: {
         type: :object,
         properties: {

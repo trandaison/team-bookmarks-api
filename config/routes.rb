@@ -18,7 +18,9 @@ Rails.application.routes.draw do
         resources :comments, only: %i[index create]
       end
       resources :comments, only: %i[show update destroy]
-      resources :login, only: :create
+      resources :login, only: :create do
+        post :google, on: :collection
+      end
       resource :logout, only: :destroy
       resources :refresh_tokens, only: :create
       resources :users, only: :create

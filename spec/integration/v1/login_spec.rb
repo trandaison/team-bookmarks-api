@@ -7,6 +7,7 @@ describe 'Blogs API' do
     post 'Login' do
       tags 'Auhorization'
       consumes 'application/json'
+      produces 'application/json'
       parameter name: :credentials, in: :body, schema: {
         type: :object,
         properties: {
